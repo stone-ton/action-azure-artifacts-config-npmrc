@@ -12,20 +12,20 @@ inputs:
     required: true
   project:
     description: 'The project name'
-    required: true
+    required: false
   username:
     description: 'The username'
-    require: true
+    required: true
 runs:
   using: "composite"
   steps: 
     - run: |
         for feed in $(echo '${{ inputs.feeds }}' | sed "s/,/ /g"); do
-          echo "//pkgs.dev.azure.com/${{ inputs.organization }}/${{ inputs.project }}/_packaging/$feed/npm/registry/:username=${{ inputs.username }}" >> ~/.npmrc
-          echo "//pkgs.dev.azure.com/${{ inputs.organization }}/${{ inputs.project }}/_packaging/$feed/npm/registry/:_password=${{ inputs.token }}" >> ~/.npmrc
-          echo "//pkgs.dev.azure.com/${{ inputs.organization }}/${{ inputs.project }}/_packaging/$feed/npm/registry/:email=none" >> ~/.npmrc
-          echo "//pkgs.dev.azure.com/${{ inputs.organization }}/${{ inputs.project }}/_packaging/$feed/npm/:username=${{ inputs.username }}" >> ~/.npmrc
-          echo "//pkgs.dev.azure.com/${{ inputs.organization }}/${{ inputs.project }}/_packaging/$feed/npm/:_password=${{ inputs.token }}" >> ~/.npmrc
-          echo "//pkgs.dev.azure.com/${{ inputs.organization }}/${{ inputs.project }}/_packaging/$feed/npm/:email=none" >> ~/.npmrc
+          echo "//pkgs.dev.azure.com/${{ inputs.organization }}${{ inputs.project && format('/{0}', inputs.project)}}/_packaging/$feed/npm/registry/:username=${{ inputs.username }}" >> ~/.npmrc
+          echo "//pkgs.dev.azure.com/${{ inputs.organization }}${{ inputs.project && format('/{0}', inputs.project)}}/_packaging/$feed/npm/registry/:_password=${{ inputs.token }}" >> ~/.npmrc
+          echo "//pkgs.dev.azure.com/${{ inputs.organization }}${{ inputs.project && format('/{0}', inputs.project)}}/_packaging/$feed/npm/registry/:email=none" >> ~/.npmrc
+          echo "//pkgs.dev.azure.com/${{ inputs.organization }}${{ inputs.project && format('/{0}', inputs.project)}}/_packaging/$feed/npm/:username=${{ inputs.username }}" >> ~/.npmrc
+          echo "//pkgs.dev.azure.com/${{ inputs.organization }}${{ inputs.project && format('/{0}', inputs.project)}}/_packaging/$feed/npm/:_password=${{ inputs.token }}" >> ~/.npmrc
+          echo "//pkgs.dev.azure.com/${{ inputs.organization }}${{ inputs.project && format('/{0}', inputs.project)}}/_packaging/$feed/npm/:email=none" >> ~/.npmrc
         done
       shell: bash
